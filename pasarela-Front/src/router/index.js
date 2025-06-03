@@ -4,35 +4,43 @@ function isAuthenticated() {
   return !!localStorage.getItem('token')
 }
 
+const routes = [
+  {
+    path: '/',
+    meta: { requiresAuth: true },
+    component: () => import('../pages/layout/DefaultLayour.vue'),
+    children: [
+      {
+        path: '',
+        name: 'home',
+        component: () => import('../pages/Home.vue'),
+      }
+    ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../pages/auth/Login.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
+  }
+]
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('../pages/Home.vue'),
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('../pages/auth/Login.vue')
-    }
-  ]
+  routes
 })
 
-// Guardia global para proteger rutas
 router.beforeEach((to, from, next) => {
   const loggedIn = isAuthenticated()
 
   if (to.meta.requiresAuth && !loggedIn) {
-    // Si intenta ir a una ruta protegida sin estar autenticado → login
-    next('/login')
-  } else if (to.path === '/login' && loggedIn) {
-    // Si está logueado e intenta entrar al login → redirige a home
-    next('/')
+    next({ name: 'login', query: { redirect: to.fullPath } })
+  } else if (to.name === 'login' && loggedIn) {
+    next({ name: 'home' })
   } else {
-    // Caso normal → continuar
     next()
   }
 })
