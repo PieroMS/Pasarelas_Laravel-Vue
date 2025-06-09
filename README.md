@@ -42,3 +42,14 @@ php artisan vendor:publish --provider "Srmklive\PayPal\Providers\PayPalServicePr
 ↓
 [Se guarda pago y se responde al cliente]
 ```
+> [!IMPORTANT]
+> Desde esta terminal, puedes ejecutar comandos para gestionar tu aplicación. Aquí tienes algunos ejemplos útiles:
+> 
+> - **Migraciones y semillas**: Prepara tu base de datos con datos iniciales.
+>   ```bash
+>   php artisan migrate:fresh --seed
+>   ```
+> - **Levantar el servidor de desarrollo**: Inicia el servidor para probar tu aplicación.
+>   ```bash
+>   php artisan serve --host=0.0.0.0
+>   ```  
