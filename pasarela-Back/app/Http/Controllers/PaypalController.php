@@ -4,70 +4,69 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
-use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
-use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
+use Illuminate\Support\Str;
 
 class PaypalController extends Controller
 {
-    public function createOrder(Request $request)
+    public function createPaypalOrder(Request $request)
     {
-        $quantity = $request->input('quantity');
-        $price = 10.00; // precio fijo
-        $total = $quantity * $price;
-        $order = Order::create([
-            'quantity' => $quantity,
-            'total' => $total,
-        ]);
+        try {
+            $user = auth()->user();
 
-        $paypal = new PayPalClient;
-        $paypal->setApiCredentials(config('paypal'));
-        $token = $paypal->getAccessToken();
-        $paypal->setAccessToken($token);
+            // 1. Guardar la orden en tu base de datos
+            $order = Order::create([
+                'order_number'      => Str::uuid(),
+                'user_id'           => $user->id,
+                'quantity'          => $request->quantity,
+                'total'             => $request->total,
+                'payment_gateway'   => 'paypal',
+                'status'            => 'pending',
+            ]);
 
-        $paypalOrder = $paypal->createOrder([
-            'intent' => 'CAPTURE',
-            'purchase_units' => [[
-                'amount' => [
-                    'currency_code' => 'USD',
-                    'value' => number_format($total, 2, '.', '')
-                ]
-            ]],
-            'application_context' => [
-                'return_url' => url("/api/paypal-success?order_id={$order->id}"),
-                'cancel_url' => url("/api/paypal-cancel?order_id={$order->id}"),
-            ]
-        ]);
+            // 2. Crear orden en PayPal
+            $provider = new PayPalClient;
+            $provider->setApiCredentials(config('paypal'));
+            $provider->setAccessToken($provider->getAccessToken());
 
-        $order->paypal_order_id = $paypalOrder['id'];
-        $order->save();
+            $paypalOrder = $provider->createOrder([
+                "intent" => "CAPTURE",
+                "purchase_units" => [[
+                    "amount" => [
+                        "currency_code" => "USD",
+                        "value" => $order->total
+                    ],
+                    "invoice_id" => $order->order_number
+                ]],
+            ]);
 
-        return response()->json([
-            'paypal_link' => collect($paypalOrder['links'])->firstWhere('rel', 'approve')['href']
-        ]);
+            // 3. Guardar ID externo en la orden
+            $order->update([
+                'external_order_id' => $paypalOrder['id'],
+            ]);
+
+            return response()->json(['paypal_order_id' => $paypalOrder['id']]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Error al crear la orden de PayPal: ' . $th->getMessage()], 500);
+        }
     }
 
-    public function captureOrder(Request $request)
+    public function capturePaypalOrder(Request $request)
     {
-        $order = Order::findOrFail($request->input('order_id'));
-        $paypal = new PayPalClient;
-        $paypal->setApiCredentials(config('paypal'));
-        $token = $paypal->getAccessToken();
-        $paypal->setAccessToken($token);
+        $provider = new PayPalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $provider->setAccessToken($provider->getAccessToken());
 
-        $capture = $paypal->capturePaymentOrder($order->paypal_order_id);
-        $order->status = 'paid';
-        $order->save();
+        $paypalResult = $provider->capturePaymentOrder($request->orderID);
 
-        return response()->json(['status' => 'success']);
-    }
+        // Actualizar estado si éxito
+        if ($paypalResult['status'] === 'COMPLETED') {
+            $order = Order::where('external_order_id', $request->orderID)->first();
+            if ($order) {
+                $order->update(['status' => 'paid']);
+            }
+        }
 
-    public function cancelOrder(Request $request)
-    {
-        $order = Order::findOrFail($request->input('order_id'));
-        $order->status = 'cancelled';
-        $order->save();
-
-        return response()->json(['status' => 'cancelled']);
+        return response()->json($paypalResult);
     }
 }

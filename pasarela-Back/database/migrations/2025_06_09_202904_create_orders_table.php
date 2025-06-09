@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('oders', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_number')->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('quantity');
             $table->decimal('total', 10, 2);
-            $table->string('payment_gateway'); // ejemplo: 'paypal', 'stripe', 'mercadopago'
-            $table->string('external_order_id')->nullable(); // ID de orden en PayPal/Stripe/etc
+            $table->string('payment_gateway'); // Ej: 'paypal'
+            $table->string('external_order_id')->nullable(); // ID en PayPal
             $table->enum('status', ['pending', 'paid', 'cancelled'])->default('pending');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('oders');
+        Schema::dropIfExists('orders');
     }
 };

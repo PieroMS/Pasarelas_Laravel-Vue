@@ -13,6 +13,5 @@ Route::get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::post('/checkout', [PaypalController::class, 'createOrder']);
-Route::get('/paypal-success', [PaypalController::class, 'captureOrder']);
-Route::get('/paypal-cancel', [PaypalController::class, 'cancelOrder']);
+Route::post('/paypal/createPaypalOrder', [PayPalController::class, 'createPaypalOrder'])->middleware('auth:sanctum');
+Route::post('/paypal/capturePaypalOrder', [PayPalController::class, 'capturePaypalOrder'])->middleware('auth:sanctum');
