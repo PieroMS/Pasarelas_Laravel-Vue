@@ -34,12 +34,26 @@
 </template>
 
 <script setup>
+import axios from 'axios'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const logout = () => {
-  localStorage.removeItem('token')
-  router.push('/login')
+const logout = async () => {
+  try {
+    await axios.post('http://127.0.0.1:8000/api/logout', {}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+
+    localStorage.removeItem('token')
+    router.push('/login')
+  } catch (error) {
+    console.error('Error cerrando sesión:', error)
+    // puedes manejar el error, pero igual forzar logout local
+    localStorage.removeItem('token')
+    router.push('/login')
+  }
 }
 </script>

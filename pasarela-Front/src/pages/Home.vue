@@ -36,46 +36,36 @@
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300" :class="gateway.gradient"></div>
       </div>
     </div>
-    
-    <!-- Información adicional -->
-    <div class="max-w-3xl mx-auto mt-12 text-center">
-      <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
-        <div class="flex items-center justify-center mb-3">
-          <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-          </svg>
-          <h3 class="text-lg font-semibold text-gray-800">Pagos 100% Seguros</h3>
-        </div>
-        <p class="text-gray-600">Todas nuestras pasarelas de pago utilizan encriptación SSL y cumplen con los estándares PCI DSS para garantizar la seguridad de tus datos.</p>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import paypal from '../assets/paypal.png'
+import niubiz from '../assets/niubiz.jpeg'
+import mercadopago from '../assets/mercadopago.png'
 
 const router = useRouter()
 
 const gateways = [
   {
     name: 'PayPal',
-    route: '/gateway/paypal',
-    image: 'https://play-lh.googleusercontent.com/iQ8f5plIFy9rrY46Q2TNRwq_8nCvh9LZVwytqMBpOEcfnIU3vTkICQ6L1-RInWS93oQg',
+    route: '/paypal',
+    image: paypal,
     description: 'Pago rápido y seguro con tu cuenta PayPal',
     gradient: 'from-blue-500 to-blue-600'
   },
   {
     name: 'Stripe',
     route: '/gateway/stripe',
-    image: 'https://yt3.googleusercontent.com/EiQSNs-L34NwO-pFTpsgdWaTKHRieqFX0QG9so1xxZ5mpPal_UJf_XYV6Tre3aNiJgRgpUXj=s900-c-k-c0x00ffffff-no-rj',
+    image: niubiz,
     description: 'Procesamiento de tarjetas de crédito y débito',
     gradient: 'from-purple-500 to-indigo-600'
   },
   {
     name: 'MercadoPago',
     route: '/gateway/mercadopago',
-    image: 'https://avatars.githubusercontent.com/u/33136169?s=200&v=4',
+    image: mercadopago,
     description: 'Solución de pagos para América Latina',
     gradient: 'from-cyan-500 to-blue-500'
   },
