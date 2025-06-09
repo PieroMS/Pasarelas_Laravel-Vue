@@ -42,7 +42,7 @@ php artisan vendor:publish --provider "Srmklive\PayPal\Providers\PayPalServicePr
 ↓
 [Se guarda pago y se responde al cliente]
 ```
-> [!FLUJO]
+> [!NOTE]
 > Desde esta terminal, puedes ejecutar comandos para gestionar tu aplicación. Aquí tienes algunos ejemplos útiles:
 > 
 > - **Migraciones y semillas**: Prepara tu base de datos con datos iniciales.
