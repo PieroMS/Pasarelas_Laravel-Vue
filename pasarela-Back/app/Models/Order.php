@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Oder extends Model
+class Order extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'order_number',
         'user_id',
@@ -15,6 +16,6 @@ class Oder extends Model
         'total',
         'payment_gateway',
         'external_order_id',
-        'status'
+        'status',
     ];
 }
