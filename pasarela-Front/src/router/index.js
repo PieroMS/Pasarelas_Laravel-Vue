@@ -14,6 +14,11 @@ const routes = [
         path: '',
         name: 'home',
         component: () => import('../pages/Home.vue'),
+      },
+      {
+        path: 'paypal',
+        name: 'paypal',
+        component: () => import('../pages/payments/Paypal.vue'),
       }
     ]
   },
