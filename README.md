@@ -25,31 +25,20 @@ php artisan vendor:publish --provider "Srmklive\PayPal\Providers\PayPalServicePr
 
 
 ### Flujo
-```
-[Usuario hace clic en botón de PayPal (Vue 3)]
-↓
-[Vue 3 llama a /api/paypal/order en Laravel]
-↓
-[Laravel crea la orden con srmklive]
-↓
-[PayPal devuelve un ID de orden al frontend]
-↓
-[Usuario aprueba el pago en el popup de PayPal]
-↓
-[Vue 3 llama a /api/paypal/capture en Laravel]
-↓
-[Laravel captura el pago con PayPal API]
-↓
-[Se guarda pago y se responde al cliente]
-```
-> [!TIP]
-> Desde esta terminal, puedes ejecutar comandos para gestionar tu aplicación. Aquí tienes algunos ejemplos útiles:
-> 
-> - **Migraciones y semillas**: Prepara tu base de datos con datos iniciales.
->   ```bash
->   php artisan migrate:fresh --seed
->   ```
-> - **Levantar el servidor de desarrollo**: Inicia el servidor para probar tu aplicación.
->   ```bash
->   php artisan serve --host=0.0.0.0
->   ```  
+
+> [!NOTE]
+> [Usuario hace clic en botón de PayPal (Vue 3)]
+> ↓
+> [Vue 3 llama a /api/paypal/order en Laravel]
+> ↓
+> [Laravel crea la orden con srmklive]
+> ↓
+> [PayPal devuelve un ID de orden al frontend]
+> ↓
+> [Usuario aprueba el pago en el popup de PayPal]
+> ↓
+> [Vue 3 llama a /api/paypal/capture en Laravel]
+> ↓
+> [Laravel captura el pago con PayPal API]
+> ↓
+> [Se guarda pago y se responde al cliente]
