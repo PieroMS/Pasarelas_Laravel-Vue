@@ -21,7 +21,7 @@ php artisan vendor:publish --provider "Srmklive\PayPal\Providers\PayPalServicePr
 
 - Ajustar el ```config/paypal``` según se requiera
 
-- Crear una cuenta personal en TestingTools para realizar el pago (comprador)
+- Crear una cuenta personal en TestingTools para realizar el pago (comprador) 
 
 
 ### Flujo
