@@ -36,6 +36,14 @@
         <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300" :class="gateway.gradient"></div>
       </div>
     </div>
+
+    <div class="max-w-3xl mx-auto mt-12 text-center">
+      <div class="bg-indigo-100 rounded-lg shadow-md p-6 border-x-6 border-indigo-700">
+          <h3 class="text-lg font-semibold text-gray-900">
+            El precio de cada producto es de $/ 100.00
+          </h3>
+      </div>
+    </div>
   </div>
 </template>
 

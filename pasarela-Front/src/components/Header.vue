@@ -18,7 +18,9 @@
           <p class="text-blue-200 text-sm font-medium">Panel de Pasarelas</p>
         </div>
       </div>
-
+      <router-link to="/" class="px-3 text-base font-bold border-b-3 border-transparent hover:border-white transition-colors duration-200">
+        INICIO
+      </router-link>
       <div class="flex items-center space-x-4">
         <button
           @click="logout"

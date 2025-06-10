@@ -13,5 +13,7 @@ Route::get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::post('/paypal/createPaypalOrder', [PayPalController::class, 'createPaypalOrder'])->middleware('auth:sanctum');
-Route::post('/paypal/capturePaypalOrder', [PayPalController::class, 'capturePaypalOrder'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->prefix('paypal')->group(function () {
+    Route::post('/createPaypalOrder', [PaypalController::class, 'createPaypalOrder']);
+    Route::post('/capturePaypalOrder', [PaypalController::class, 'capturePaypalOrder']);
+});

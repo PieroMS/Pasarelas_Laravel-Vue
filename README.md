@@ -28,17 +28,10 @@ php artisan vendor:publish --provider "Srmklive\PayPal\Providers\PayPalServicePr
 
 > [!NOTE]
 > - Usuario hace clic en botón pagar de PayPal
-> - ↓
 > - Vue 3 llama a /api/paypal/createPaypalOrder en Laravel
-> - ↓
 > - Laravel crea la orden con srmklive
-> - ↓
 > - PayPal devuelve un ID de orden al frontend
-> - ↓
 > - Usuario aprueba el pago en el popup de PayPal
-> - ↓
 > - Vue 3 llama a /api/paypal/capturePaypalOrder en Laravel
-> - ↓
 > - Laravel captura el pago con PayPal API
-> - ↓
 > - Se guarda pago y se responde al cliente

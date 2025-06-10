@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Illuminate\Support\Str;
 
@@ -12,7 +13,7 @@ class PaypalController extends Controller
     public function createPaypalOrder(Request $request)
     {
         try {
-            $user = auth()->user();
+            $user = Auth::user();
 
             // 1. Guardar la orden en tu base de datos
             $order = Order::create([
@@ -25,11 +26,11 @@ class PaypalController extends Controller
             ]);
 
             // 2. Crear orden en PayPal
-            $provider = new PayPalClient;
-            $provider->setApiCredentials(config('paypal'));
-            $provider->setAccessToken($provider->getAccessToken());
+            $provider = new PayPalClient; // Instancia del cliente PayPal proporcionado por srmklive/paypal.
+            $provider->setApiCredentials(config('paypal')); // Carga las credenciales de PayPal desde config/paypal.php
+            $provider->setAccessToken($provider->getAccessToken()); // Solicita un token de acceso OAuth 2.0 a PayPal con las credenciales configuradas
 
-            $paypalOrder = $provider->createOrder([
+            $paypalOrder = $provider->createOrder([ //Llama a la API de PayPal para crear una orden de pago
                 "intent" => "CAPTURE",
                 "purchase_units" => [[
                     "amount" => [
@@ -51,13 +52,14 @@ class PaypalController extends Controller
         }
     }
 
+    // confirma (captura) el pago aprobado en PayPal
     public function capturePaypalOrder(Request $request)
     {
         $provider = new PayPalClient;
         $provider->setApiCredentials(config('paypal'));
         $provider->setAccessToken($provider->getAccessToken());
 
-        $paypalResult = $provider->capturePaymentOrder($request->orderID);
+        $paypalResult = $provider->capturePaymentOrder($request->orderID); // Captura el pago de la orden en PayPal usando el orderID que envía el frontend.
 
         // Actualizar estado si éxito
         if ($paypalResult['status'] === 'COMPLETED') {
